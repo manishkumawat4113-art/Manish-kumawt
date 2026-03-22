@@ -37,7 +37,24 @@ body {
   background-color: #ffffc7;
 }
 
-#reset-btn {
+
+#UD{
+  padding: 1rem;
+  font-size: 1.25rem;
+  background-color: #191913;
+  color: #fff;
+  border-radius: 1rem;
+  border: none;
+}
+#NG{
+  padding: 1rem;
+  font-size: 1.25rem;
+  background-color: #191913;
+  color: #fff;
+  border-radius: 1rem;
+  border: none;
+}
+#RG{
   padding: 1rem;
   font-size: 1.25rem;
   background-color: #191913;
@@ -46,23 +63,6 @@ body {
   border: none;
 }
 
-#undo-btn {
-  padding: 1rem;
-  font-size: 1.25rem;
-  background-color: #191913;
-  color: #fff;
-  border-radius: 1rem;
-  border: none;
-}
-
-#new-btn {
-  padding: 1rem;
-  font-size: 1.25rem;
-  background-color: #191913;
-  color: #fff;
-  border-radius: 1rem;
-  border: none;
-}
 
 #msg {
   color: #ffffc7;
