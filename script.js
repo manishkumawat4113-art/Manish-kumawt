@@ -1,8 +1,9 @@
 let boxes = document.querySelectorAll(".box");
-let resetBtn = document.querySelector("#reset-btn");
-let newGameBtn = document.querySelector("#new-btn");
+let resetBtn = document.querySelector("#RG");
+let newGameBtn = document.querySelector("#NG");
 let msgContainer = document.querySelector(".msg-container");
 let msg = document.querySelector("#msg");
+
 
 let turnO = true; //playerX, playerO
 let count = 0; //To Track Draw
@@ -23,7 +24,7 @@ let moveHistory = [];
 const resetGame = () => {
   turnO = true;
   count = 0;
-moveHistory = [];
+  moveHistory = [];
   enableBoxes();
   msgContainer.classList.add("hide");
 };
@@ -33,7 +34,7 @@ boxes.forEach((box,index) => {
     if (turnO) {
       //playerO
       box.innerText = "O";
-moveHistory.push({ index: index, player: "O" });
+      moveHistory.push({ index: index, player: "O" });
       turnO = false;
     } else {
       //playerX
@@ -92,7 +93,7 @@ const checkWinner = () => {
   }
 };
 
-let undoBtn = document.querySelector("#undo-btn");
+let undoBtn = document.querySelector("#UD");
 
 undoBtn.addEventListener("click", () => {
   if (moveHistory.length === 0) return;
