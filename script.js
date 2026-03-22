@@ -18,22 +18,27 @@ const winPatterns = [
   [6, 7, 8],
 ];
 
+let moveHistory = [];
+
 const resetGame = () => {
   turnO = true;
   count = 0;
+moveHistory = [];
   enableBoxes();
   msgContainer.classList.add("hide");
 };
 
-boxes.forEach((box) => {
+boxes.forEach((box,index) => {
   box.addEventListener("click", () => {
     if (turnO) {
       //playerO
       box.innerText = "O";
+moveHistory.push({ index: index, player: "O" });
       turnO = false;
     } else {
       //playerX
       box.innerText = "X";
+moveHistory.push({ index: index, player: "X" });
       turnO = true;
     }
     box.disabled = true;
@@ -86,6 +91,25 @@ const checkWinner = () => {
     }
   }
 };
+
+let undoBtn = document.querySelector("#undo-btn");
+
+undoBtn.addEventListener("click", () => {
+  if (moveHistory.length === 0) return;
+
+  let lastMove = moveHistory.pop();
+
+  let box = boxes[lastMove.index];
+  box.innerText = "";
+  box.disabled = false;
+
+  count--;
+
+  // turn wapas switch karo
+  turnO = lastMove.player === "O";
+
+  msgContainer.classList.add("hide"); // winner/draw message hata do
+});
 
 newGameBtn.addEventListener("click", resetGame);
 resetBtn.addEventListener("click", resetGame);
