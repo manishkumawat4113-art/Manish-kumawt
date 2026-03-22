@@ -1,116 +1,84 @@
-let boxes = document.querySelectorAll(".box");
-let resetBtn = document.querySelector("#RG");
-let newGameBtn = document.querySelector("#NG");
-let msgContainer = document.querySelector(".msg-container");
-let msg = document.querySelector("#msg");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #548687;
+  text-align: center;
+}
+
+.container {
+  height: 70vh;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.game {
+  height: 60vmin;
+  width: 60vmin;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vmin;
+}
+
+.box {
+  height: 18vmin;
+  width: 18vmin;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+  font-size: 8vmin;
+  color: #b0413e;
+  background-color: #ffffc7;
+}
+
+#RG {
+  padding: 1rem;
+  font-size: 1.25rem;
+  background-color: #191913;
+  color: #fff;
+  border-radius: 1rem;
+  border: none;
+}
+
+#NG{
+  padding: 1rem;
+  font-size: 1.25rem;
+  background-color: #191913;
+  color: #fff;
+  border-radius: 1rem;
+  border: none;
+}
+
+#UD{
+  padding: 1rem;
+  font-size: 1.25rem;
+  background-color: #191913;
+  color: #fff;
+  border-radius: 1rem;
+  border: none;
+}
 
 
-let turnO = true; //playerX, playerO
-let count = 0; //To Track Draw
+#msg {
+  color: #ffffc7;
+  font-size: 5vmin;
+}
 
-const winPatterns = [
-  [0, 1, 2],
-  [0, 3, 6],
-  [0, 4, 8],
-  [1, 4, 7],
-  [2, 5, 8],
-  [2, 4, 6],
-  [3, 4, 5],
-  [6, 7, 8],
-];
+.msg-container {
+  height: 100vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4rem;
+}
 
-let moveHistory = [];
-
-const resetGame = () => {
-  turnO = true;
-  count = 0;
-  moveHistory = [];
-  enableBoxes();
-  msgContainer.classList.add("hide");
-};
-
-boxes.forEach((box,index) => {
-  box.addEventListener("click", () => {
-    if (turnO) {
-      //playerO
-      box.innerText = "O";
-      moveHistory.push({ index: index, player: "O" });
-      turnO = false;
-    } else {
-      //playerX
-      box.innerText = "X";
-moveHistory.push({ index: index, player: "X" });
-      turnO = true;
-    }
-    box.disabled = true;
-    count++;
-
-    let isWinner = checkWinner();
-
-    if (count === 9 && !isWinner) {
-      gameDraw();
-    }
-  });
-});
-
-const gameDraw = () => {
-  msg.innerText = `Game was a Draw.`;
-  msgContainer.classList.remove("hide");
-  disableBoxes();
-};
-
-const disableBoxes = () => {
-  for (let box of boxes) {
-    box.disabled = true;
-  }
-};
-
-const enableBoxes = () => {
-  for (let box of boxes) {
-    box.disabled = false;
-    box.innerText = "";
-  }
-};
-
-const showWinner = (winner) => {
-  msg.innerText = `Congratulations, Winner is ${winner}`;
-  msgContainer.classList.remove("hide");
-  disableBoxes();
-};
-
-const checkWinner = () => {
-  for (let pattern of winPatterns) {
-    let pos1Val = boxes[pattern[0]].innerText;
-    let pos2Val = boxes[pattern[1]].innerText;
-    let pos3Val = boxes[pattern[2]].innerText;
-
-    if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
-      if (pos1Val === pos2Val && pos2Val === pos3Val) {
-        showWinner(pos1Val);
-        return true;
-      }
-    }
-  }
-};
-
-let undoBtn = document.querySelector("#UD");
-
-undoBtn.addEventListener("click", () => {
-  if (moveHistory.length === 0) return;
-
-  let lastMove = moveHistory.pop();
-
-  let box = boxes[lastMove.index];
-  box.innerText = "";
-  box.disabled = false;
-
-  count--;
-
-  // turn wapas switch karo
-  turnO = lastMove.player === "O";
-
-  msgContainer.classList.add("hide"); // winner/draw message hata do
-});
-
-newGameBtn.addEventListener("click", resetGame);
-resetBtn.addEventListener("click", resetGame);
+.hide {
+  display: none;
+}
