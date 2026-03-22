@@ -1,84 +1,114 @@
-* {
-  margin: 0;
-  padding: 0;
-}
+let boxes = document.querySelectorAll(".box");
+let resetBtn = document.querySelector("#rg");
+let newGameBtn = document.querySelector("#ng");
+let msgContainer = document.querySelector(".msg-container");
+let msg = document.querySelector("#msg");
 
-body {
-  background-color: #548687;
-  text-align: center;
-}
+let turnO = true; //playerX, playerO
+let count = 0; //To Track Draw
 
-.container {
-  height: 70vh;
-  display: flex;
+const winPatterns = [
+  [0, 1, 2],
+  [0, 3, 6],
+  [0, 4, 8],
+  [1, 4, 7],
+  [2, 5, 8],
+  [2, 4, 6],
+  [3, 4, 5],
+  [6, 7, 8],
+];
+let moveHistory = [];
 
-  justify-content: center;
-  align-items: center;
-}
+const resetGame = () => {
+  turnO = true;
+  count = 0;
+  moveHistory = [];
+  enableBoxes();
+  msgContainer.classList.add("hide");
+};
 
-.game {
-  height: 60vmin;
-  width: 60vmin;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5vmin;
-}
+boxes.forEach((box,index) => {
+  box.addEventListener("click", () => {
+    if (turnO) {
+      //playerO
+      box.innerText = "O";
+      moveHistory.push({ index: index, player: "O" });
+      turnO = false;
+    } else {
+      //playerX
+      box.innerText = "X";
+      moveHistory.push({ index: index, player: "X" });
+      turnO = true;
+    }
+    box.disabled = true;
+    count++;
 
-.box {
-  height: 18vmin;
-  width: 18vmin;
-  border-radius: 1rem;
-  border: none;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
-  font-size: 8vmin;
-  color: #b0413e;
-  background-color: #ffffc7;
-}
+    let isWinner = checkWinner();
 
-#RG {
-  padding: 1rem;
-  font-size: 1.25rem;
-  background-color: #191913;
-  color: #fff;
-  border-radius: 1rem;
-  border: none;
-}
+    if (count === 9 && !isWinner) {
+      gameDraw();
+    }
+  });
+});
 
-#NG{
-  padding: 1rem;
-  font-size: 1.25rem;
-  background-color: #191913;
-  color: #fff;
-  border-radius: 1rem;
-  border: none;
-}
+const gameDraw = () => {
+  msg.innerText = `Game was a Draw.`;
+  msgContainer.classList.remove("hide");
+  disableBoxes();
+};
 
-#UD{
-  padding: 1rem;
-  font-size: 1.25rem;
-  background-color: #191913;
-  color: #fff;
-  border-radius: 1rem;
-  border: none;
-}
+const disableBoxes = () => {
+  for (let box of boxes) {
+    box.disabled = true;
+  }
+};
 
+const enableBoxes = () => {
+  for (let box of boxes) {
+    box.disabled = false;
+    box.innerText = "";
+  }
+};
 
-#msg {
-  color: #ffffc7;
-  font-size: 5vmin;
-}
+const showWinner = (winner) => {
+  msg.innerText = `Congratulations, Winner is ${winner}`;
+  msgContainer.classList.remove("hide");
+  disableBoxes();
+};
 
-.msg-container {
-  height: 100vmin;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 4rem;
-}
+const checkWinner = () => {
+  for (let pattern of winPatterns) {
+    let pos1Val = boxes[pattern[0]].innerText;
+    let pos2Val = boxes[pattern[1]].innerText;
+    let pos3Val = boxes[pattern[2]].innerText;
 
-.hide {
-  display: none;
-}
+    if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
+      if (pos1Val === pos2Val && pos2Val === pos3Val) {
+        showWinner(pos1Val);
+        return true;
+      }
+    }
+  }
+};
+
+let undoBtn = document.querySelector("#ud");
+
+undoBtn.addEventListener("click", () => {
+  if (moveHistory.length === 0) return;
+
+  let lastMove = moveHistory.pop();
+
+  let box = boxes[lastMove.index];
+  box.innerText = "";
+  box.disabled = false;
+
+  count--;
+
+  // turn wapas switch karo
+  turnO = lastMove.player === "O";
+
+  msgContainer.classList.add("hide"); // winner/draw message hata do
+});
+
+newGameBtn.addEventListener("click", resetGame);
+resetBtn.addEventListener("click", resetGame);
